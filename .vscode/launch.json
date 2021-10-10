@@ -1,0 +1,50 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Init",
+      "program": "${workspaceFolder}/packages/scafflater-cli/bin/run",
+      "args": [
+        "init",
+        "https://github.com/chicoribas/scafflater-template",
+        "-p=name:template-name",
+        "-p=description:Template Description"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug add partial",
+      "program": "${workspaceFolder}/packages/scafflater-cli/bin/run",
+      "args": [
+        "partial:run",
+        "update-readme",
+        "-o=/Users/ribasf//Documents/GitHub/personal/scafflater-serverless-aws-templatet"
+      ]
+    },
+    {
+      "type": "node",
+      "name": "vscode-jest-tests",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "program": "${workspaceFolder}/jest",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "--detectOpenHandles",
+        "--collectCoverage",
+        "--runInBand",
+        "--verbose",
+        "--forceExit",
+        "--runInBand",
+        "--watchAll=false"
+      ]
+    }
+  ]
+}
