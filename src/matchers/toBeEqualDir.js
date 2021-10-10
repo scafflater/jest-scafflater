@@ -2,6 +2,7 @@ const fs = require("fs-extra");
 const dircompare = require("dir-compare");
 const path = require("path");
 const prettier = require("prettier");
+const utils = require("jest-matcher-utils");
 
 const EXPECTED_LABEL = "Expected";
 const RECEIVED_LABEL = "Received";
@@ -12,7 +13,7 @@ const loadFormattedContent = (filePath) => {
   });
 };
 
-const compareFiles = (diff, utils) => {
+const compareFiles = (diff) => {
   const content1 = loadFormattedContent(path.resolve(diff.path1, diff.name1));
   const content2 = loadFormattedContent(path.resolve(diff.path2, diff.name2));
 
@@ -90,7 +91,7 @@ const toBeEqualDir = (received, expected) => {
     diff.type2 === "file" &&
     diff.reason === "different-content"
   ) {
-    return compareFiles(diff, this.utils);
+    return compareFiles(diff);
   }
 
   return {
