@@ -1,0 +1,48 @@
+name: Release Drafter
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    # Only following types are handled by the action, but one can default to all as well
+    types: [opened, reopened, synchronize]
+
+  workflow_dispatch:
+
+jobs:
+  update_release_draft:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: release-drafter/release-drafter@v5
+        id: release-drafter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup node 15.x
+        uses: actions/setup-node@v2.4.1
+        with:
+          node-version: 15.x
+
+      - name: Setup npm
+        run: npm install -g npm@7.19.0
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Bumping package versions
+        run: |
+          npm version ${{ steps.release-drafter.outputs.tag_name }} --no-git-tag-version
+        working-directory: ${{env.working-diretory}}
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: "Changes to publish ${{ steps.release-drafter.outputs.tag_name }}"
+          title: ${{ steps.release-drafter.outputs.tag_name }}
+          body: ${{ steps.release-drafter.outputs.body }}
+          branch: ${{ steps.release-drafter.outputs.tag_name }}
