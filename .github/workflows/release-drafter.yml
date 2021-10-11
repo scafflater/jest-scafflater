@@ -51,3 +51,6 @@ jobs:
           title: ${{ steps.release-drafter.outputs.tag_name }}
           body: ${{ steps.release-drafter.outputs.body }}
           branch: ${{ steps.release-drafter.outputs.tag_name }}
+          labels: |
+            ${{ steps.release-drafter.outputs.tag_name }}
+            release
