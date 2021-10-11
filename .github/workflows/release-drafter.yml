@@ -21,17 +21,21 @@ jobs:
 
       - name: Setup node 15.x
         uses: actions/setup-node@v2.4.1
+        if: ${{ success() }}
         with:
           node-version: 15.x
 
       - name: Setup npm
+        if: ${{ success() }}
         run: npm install -g npm@7.19.0
 
       - uses: actions/checkout@v2
+        if: ${{ success() }}
         with:
           fetch-depth: 0
 
       - name: Bumping package versions
+        if: ${{ success() }}
         run: |
           npm version ${{ steps.release-drafter.outputs.tag_name }} --no-git-tag-version
         working-directory: ${{env.working-diretory}}
@@ -40,6 +44,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Pull Request
+        if: ${{ success() && steps.release-drafter.outputs.tag_name != ''}}
         uses: peter-evans/create-pull-request@v3
         with:
           commit-message: "Changes to publish ${{ steps.release-drafter.outputs.tag_name }}"
