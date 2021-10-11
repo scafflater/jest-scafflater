@@ -35,7 +35,7 @@ jobs:
           fetch-depth: 0
 
       - name: Bumping package versions
-        if: ${{ success() && steps.release-drafter.outputs.tag_name != '' && steps.release-drafter.outputs.tag_name != 'untagged'}}
+        if: ${{ success() && steps.release-drafter.outputs.tag_name != '' && !startsWith(steps.release-drafter.outputs.tag_name, 'untagged')}}
         run: |
           npm version ${{ steps.release-drafter.outputs.tag_name }} --no-git-tag-version
         working-directory: ${{env.working-diretory}}
@@ -44,7 +44,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Pull Request
-        if: ${{ success() && steps.release-drafter.outputs.tag_name != '' && steps.release-drafter.outputs.tag_name != 'untagged'}}
+        if: ${{ success() && steps.release-drafter.outputs.tag_name != '' && !startsWith(steps.release-drafter.outputs.tag_name, 'untagged')}}
         uses: peter-evans/create-pull-request@v3
         with:
           commit-message: "Changes to publish ${{ steps.release-drafter.outputs.tag_name }}"
