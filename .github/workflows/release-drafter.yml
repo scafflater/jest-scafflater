@@ -48,6 +48,7 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           commit-message: "Changes to publish ${{ steps.release-drafter.outputs.tag_name }}"
+          base: main
           title: ${{ steps.release-drafter.outputs.tag_name }}
           body: ${{ steps.release-drafter.outputs.body }}
           branch: ${{ steps.release-drafter.outputs.tag_name }}
