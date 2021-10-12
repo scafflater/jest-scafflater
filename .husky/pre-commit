@@ -1,7 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-# npm test
+npm test
+npm audit --production
 npm run lint:fix
 npm run update-readme-toc
 

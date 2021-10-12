@@ -19,11 +19,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup node 15.x
+      - name: Setup node 14.x
         uses: actions/setup-node@v2.4.1
         if: ${{ success() }}
         with:
-          node-version: 15.x
+          node-version: 14.x
 
       - name: Setup npm
         if: ${{ success() }}

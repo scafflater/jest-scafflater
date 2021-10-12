@@ -1,0 +1,6 @@
+test: Test yaml
+testing: "yaml"
+array-test:
+  - a
+  - b
+  - c
