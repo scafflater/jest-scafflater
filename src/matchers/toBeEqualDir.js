@@ -8,9 +8,17 @@ const EXPECTED_LABEL = "Expected";
 const RECEIVED_LABEL = "Received";
 
 const loadFormattedContent = (filePath) => {
-  return prettier.format(fs.readFileSync(filePath, "utf-8"), {
-    filepath: filePath,
-  });
+  const fileContent = fs.readFileSync(filePath, "utf-8");
+  try {
+    return prettier.format(fileContent, {
+      filepath: filePath,
+    });
+  } catch (error) {
+    if (error.message.startsWith("No parser could be inferred for file")) {
+      return fileContent;
+    }
+    console.log(error);
+  }
 };
 
 const compareFiles = (diff) => {
@@ -38,7 +46,7 @@ const compareFiles = (diff) => {
       diff.name1
     )}\n\n${stringDiff}
     `,
-    pass: true,
+    pass: false,
   };
 };
 
@@ -75,16 +83,28 @@ const toBeEqualDir = (received, expected) => {
 
   let message = JSON.stringify(diff, null, 2);
   if (diff.type1 === "directory" && diff.type2 === "missing") {
-    message = `Directory '${diff.name1}' not expected to be in result`;
+    message = `Folder '${path.join(
+      diff.relativePath,
+      diff.name1
+    )}' expected but not present in result`;
   }
   if (diff.type1 === "missing" && diff.type2 === "directory") {
-    message = `Directory '${diff.name2}' expected but not present in result`;
+    message = `Folder '${path.join(
+      diff.relativePath,
+      diff.name2
+    )}' not expected to be in result`;
   }
   if (diff.type1 === "file" && diff.type2 === "missing") {
-    message = `File '${diff.name1}' not expected to be in result`;
+    message = `File '${path.join(
+      diff.relativePath,
+      diff.name1
+    )}' expected but not present in result`;
   }
   if (diff.type1 === "missing" && diff.type2 === "file") {
-    message = `File '${diff.name2}' expected but not present in result`;
+    message = `File '${path.join(
+      diff.relativePath,
+      diff.name2
+    )}' not expected to be in result`;
   }
   if (
     diff.type1 === "file" &&
