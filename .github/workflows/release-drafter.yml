@@ -20,7 +20,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup node 14.x
-        uses: actions/setup-node@v2.4.1
+        uses: actions/setup-node@v3
         if: ${{ success() }}
         with:
           node-version: 14.x
